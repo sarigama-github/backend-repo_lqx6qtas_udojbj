@@ -13,6 +13,7 @@ Model name is converted to lowercase for the collection name:
 
 from pydantic import BaseModel, Field
 from typing import Optional
+import datetime as dt
 
 # Example schemas (replace with your own):
 
@@ -37,6 +38,31 @@ class Product(BaseModel):
     price: float = Field(..., ge=0, description="Price in dollars")
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
+
+# Lobster harvest & investing app schemas
+
+class Harvest(BaseModel):
+    """
+    Lobster harvest logs
+    Collection: "harvest"
+    """
+    harvest_date: dt.date = Field(..., description="Catch date")
+    boat: str = Field(..., description="Vessel name/ID")
+    location: str = Field(..., description="Fishing area / port")
+    weight_kg: float = Field(..., gt=0, description="Total catch weight (kg)")
+    price_per_kg: float = Field(..., ge=0, description="Dock price per kg ($)")
+    notes: Optional[str] = Field(None, description="Optional notes")
+
+class Investment(BaseModel):
+    """
+    Investment records for lobster operations
+    Collection: "investment"
+    """
+    investor_name: str = Field(..., description="Investor full name")
+    amount_usd: float = Field(..., gt=0, description="Amount invested (USD)")
+    investment_date: dt.date = Field(..., description="Investment date")
+    instrument: str = Field(..., description="Type (equipment, working-capital, revenue-share, etc.)")
+    notes: Optional[str] = Field(None, description="Optional notes")
 
 # Add your own schemas here:
 # --------------------------------------------------
